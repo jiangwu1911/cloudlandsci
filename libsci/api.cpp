@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <unistd.h>
 #include <vector>
 #include <sys/socket.h>
 

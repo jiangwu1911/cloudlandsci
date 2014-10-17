@@ -30,13 +30,14 @@
 
 ****************************************************************************/
 
-#include "ctrlblock.hpp"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pwd.h>
 #include <errno.h>
+#include <unistd.h>
 
+#include "ctrlblock.hpp"
 #include "stream.hpp"
 #include "exception.hpp"
 #include "group.hpp"

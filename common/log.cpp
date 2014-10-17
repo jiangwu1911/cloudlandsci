@@ -32,6 +32,7 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 const char *logHeader[] = {
     "[CRIT]",
