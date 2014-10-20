@@ -38,7 +38,7 @@
 #include "tools.hpp"
 #include "ipconverter.hpp"
 
-
+#define TCP_USER_TIMEOUT        18  // Copy from linux/tcp.h
 #define CONNECTING_TIMES 200
 
 int Socket::disableIpv6 = 0;
@@ -92,8 +92,10 @@ int Socket::setFd(int fd)
     if (fd < 0) {
         throw SocketException(SocketException::NET_ERR_SOCKET, errno);
     }
-    int nodelay = 1;
-    ::setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char*)&nodelay, sizeof(nodelay));
+    int value = 1;
+    ::setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char*)&value, sizeof(value));
+    value = 10000;
+    ::setsockopt(fd, SOL_TCP, TCP_USER_TIMEOUT, (char*)&value, sizeof(value));
     socket = fd;
 
     return 0;
