@@ -1,0 +1,8 @@
+*.o
+*.a
+*/.deps
+*/*/.deps
+Makefile
+config.*
+libtool
+stamp-h1
