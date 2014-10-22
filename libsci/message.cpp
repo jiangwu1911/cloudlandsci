@@ -179,6 +179,7 @@ bool Message::isValidType(int type)
         case Message::ERROR_DATA:
         case Message::ERROR_THREAD:
         case Message::SEGMENT:
+        case Message::HEARTBEAT:
             flag = true;
             break;
         default:

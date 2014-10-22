@@ -308,7 +308,7 @@ int Socket::accept()
         fds[i].events = POLLIN;
     }
 
-    n = poll(fds, accCount, 500);
+    n = ::poll(fds, accCount, 500);
     if (n > 0) {
         for (i = 0; i < accCount; i++) {
             if (fds[i].revents) {
@@ -317,7 +317,7 @@ int Socket::accept()
                     throw (SocketException(SocketException::NET_ERR_ACCEPT, errno));
                 }
                 ::setsockopt(client, IPPROTO_TCP, TCP_NODELAY, (char*)&nodelay, sizeof(nodelay));
-                setMode(client, true);
+                setMode(client, false);
                 break;
             }
         }
@@ -348,6 +348,19 @@ int Socket::send(const char *buf, int len)
     }
 
     return 0;
+}
+
+bool Socket::pollFd(int timeout)
+{
+    int n = -1;
+    bool ret = false;
+    struct pollfd pfd = {0};
+
+    pfd.fd = socket;
+    pfd.events = POLLIN;
+    n = ::poll(&pfd, 1, timeout);
+
+    return n > 0;
 }
 
 int Socket::recv(char *buf, int len)

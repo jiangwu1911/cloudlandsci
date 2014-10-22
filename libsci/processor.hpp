@@ -52,6 +52,7 @@ class Processor : public Thread
         MessageQueue        *inQueue;
         MessageQueue        *outQueue;
         int                 hState;
+        int                 counter;
 
     public:
         Processor(int hndl = -1);

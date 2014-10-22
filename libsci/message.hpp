@@ -76,7 +76,8 @@ class Message
             ERROR_DATA = -4003,
             ERROR_THREAD = -4004,
             // used for message segmentation
-            SEGMENT = -5001
+            SEGMENT = -5001,
+            HEARTBEAT = -6001
         };
         
     private:

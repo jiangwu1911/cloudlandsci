@@ -56,7 +56,8 @@ class Socket
         int setMode(int sockfd, bool mode); // blocking or non-blocking
         int setFd(int fd);
         int getFd() { return socket; }
-        
+
+        bool pollFd(int timeout);
         int listen(int &port, char *hname = NULL);
         int iflisten(int &port, const string &ifname);
         int connect(const char *hostName, in_port_t port);

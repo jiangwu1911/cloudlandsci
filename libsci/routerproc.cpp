@@ -74,8 +74,21 @@ Message * RouterProcessor::read()
 
     Message *msg = NULL;
     if (inStream) {
-        msg = new Message();
-        *inStream >> *msg;
+        /* Check every 1 second */
+        if (inStream->pollData(1000)) {
+            msg = new Message();
+            *inStream >> *msg;
+        }
+
+        /* Send heartbeat message every 10 seconds */
+        counter++;
+        if (counter >= 10) {
+            WriterProcessor * writer = getPeerProcessor();
+            Message *hbMsg = new Message(); 
+            hbMsg->build(SCI_FILTER_NULL, SCI_GROUP_ALL, 0, NULL, NULL, Message::HEARTBEAT);
+            writer->getInQueue()->produce(hbMsg);
+            counter = 0;
+        }
     } else {
         msg = inQueue->consume();
     }

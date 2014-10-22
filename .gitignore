@@ -1,8 +1,15 @@
 *.o
 *.a
+*.lo
+*.la
+*.so
 */.deps
 */*/.deps
 Makefile
-config.*
+config*
 libtool
 stamp-h1
+usecase*
+*.libs*
+*scia64
+*scidv1

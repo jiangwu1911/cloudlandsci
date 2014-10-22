@@ -53,6 +53,7 @@
 PurifierProcessor::PurifierProcessor(int hndl) 
     : Processor(hndl), inStream(NULL), outErrorQueue(NULL), peerProcessor(NULL), observer(NULL), joinSegs(false)
 {
+    counter = 0;
     name = "Purifier";
     hndlr = gCtrlBlock->getEndInfo()->be_info.hndlr;
     param = gCtrlBlock->getEndInfo()->be_info.param;
@@ -89,8 +90,21 @@ Message * PurifierProcessor::read()
     assert(inStream || inQueue);
 
     if (inStream != NULL) {
-        msg = new Message();
-        *inStream >> *msg;
+        /* Check every 1 second */
+        if (inStream->pollData(1000)) {
+            msg = new Message();
+            *inStream >> *msg;
+        }
+
+        /* Send heartbeat message every 10 seconds */
+        counter++;
+        if (counter >= 10) {
+            WriterProcessor * writer = getPeerProcessor();
+            Message *hbMsg = new Message(); 
+            hbMsg->build(SCI_FILTER_NULL, SCI_GROUP_ALL, 0, NULL, NULL, Message::HEARTBEAT);
+            writer->getInQueue()->produce(hbMsg);
+            counter = 0;
+        }
     } else {
         msg = inQueue->consume();
     }

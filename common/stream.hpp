@@ -56,6 +56,7 @@ class Stream
         int init(const char *nodeAddr, in_port_t port);
         int init(int sockfd);
         int getSocket(); 
+        bool pollData(int timeout);
 
         void read(char *buf, int size);
         void write(const char *buf, int size);

@@ -89,6 +89,11 @@ int Stream::init(int sockfd)
     return 0;
 }
 
+bool Stream::pollData(int timeout)
+{
+    return socket->pollFd(timeout);
+}
+
 void Stream::read(char *buf, int size)
 {
     int n = 0;
