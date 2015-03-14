@@ -78,10 +78,23 @@ typedef int (SCI_connect_hndlr)(const char *hostname);  // hostname can be a nam
 typedef int (SCI_err_hndlr)(int err_code, int node_id, int num_bes);
 
 /*
+** SCI filter message extention flag
+*/
+typedef enum {
+    SCI_NORMAL,
+    SCI_ERROR_CHILD
+} sci_flag_t;
+
+typedef struct {
+    sci_flag_t flag;
+    char *ex_msg;
+} sci_exflag_t;
+
+/*
 ** SCI Filter message handler
 */
 typedef int (filter_init_hndlr)(void **user_param);
-typedef int (filter_input_hndlr)(void *user_param, sci_group_t group, void *buf, int size);
+typedef int (filter_input_hndlr)(void *user_param, sci_group_t group, void *buf, int size, sci_exflag_t *exflag);
 typedef int (filter_term_hndlr)(void *user_param);
 
 /*
@@ -177,7 +190,9 @@ typedef enum {
     SCI_CHILDREN_FDLIST,
     SCI_NUM_LISTENER_FDS,
     SCI_LISTENER_FDLIST,
-    SCI_RECOVER_STATUS
+    SCI_RECOVER_STATUS,
+    SCI_NUM_ERROR_SUCCESSORS,
+    SCI_ERROR_SUCCESSORS
 #define JOB_KEY              SCI_JOB_KEY
 #define NUM_BACKENDS         SCI_NUM_BACKENDS
 #define BACKEND_ID           SCI_BACKEND_ID
@@ -198,6 +213,8 @@ typedef enum {
 #define NUM_LISTENER_FDS     SCI_NUM_LISTENER_FDS
 #define LISTENER_FDLIST      SCI_LISTENER_FDLIST
 #define RECOVER_STATUS       SCI_RECOVER_STATUS
+#define NUM_ERROR_SUCCESSORS SCI_NUM_ERROR_SUCCESSORS
+#define ERROR_SUCCESSORS     SCI_ERROR_SUCCESSORS
 } sci_query_t;
 
 typedef enum {

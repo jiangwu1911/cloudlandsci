@@ -41,6 +41,7 @@
 #include "stream.hpp"
 #include "queue.hpp"
 #include "writerproc.hpp"
+#include "filterproc.hpp"
 
 #include "eventntf.hpp"
 #include "tools.hpp"
@@ -152,6 +153,10 @@ int ReaderProcessor::recover()
         writer->setReleaseState(true);
         writer->getInQueue()->produce(msg);
     }
+    gCtrlBlock->addErrSuccessor(handle);
+    Message *fmsg = new Message();
+    fmsg->build(gCtrlBlock->getFilterProcessor()->getCurFilterID(), SCI_GROUP_ALL, 0, NULL, NULL, Message::ERROR_CHILD);
+    outQueue->produce(fmsg);
 
     if (recoverID == -1) {
         recoverID = gNotifier->allocate();
@@ -169,7 +174,8 @@ int ReaderProcessor::recover()
         log_debug("reader%d: recover error: notify_i failed for the stream %p, recoverID = %d", handle, st, recoverID);
         return -1;
     }
-    
+
+    gCtrlBlock->delErrSuccessor(handle);
     inStream = st;
     return 0; 
 }

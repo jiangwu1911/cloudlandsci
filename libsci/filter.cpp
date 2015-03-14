@@ -133,9 +133,9 @@ int Filter::load()
     return handler.init_hndlr(&param);
 }
 
-int Filter::input(sci_group_t group, void *buf, int size)
+int Filter::input(sci_group_t group, void *buf, int size, sci_exflag_t *exflag)
 {
-    return handler.input_hndlr(param, group, buf, size);
+    return handler.input_hndlr(param, group, buf, size, exflag);
 }
 
 int Filter::unload()

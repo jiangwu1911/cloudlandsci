@@ -55,7 +55,7 @@ class Filter
         void unpackMsg(Message &msg);
         
         int load();
-        int input(sci_group_t group, void *buf, int size);
+        int input(sci_group_t group, void *buf, int size, sci_exflag_t *exflag);
         int unload();
 
         int getId();

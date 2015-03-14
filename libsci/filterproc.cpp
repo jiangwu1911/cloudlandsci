@@ -77,12 +77,15 @@ void FilterProcessor::process(Message * msg)
     int id = msg->getFilterID();
     if (id != SCI_FILTER_NULL) {
         Filter *filter = filterList->getFilter(id);
+        sci_exflag_t exflag = {SCI_NORMAL, NULL};
+        if (msg->getType() == Message::ERROR_CHILD)
+            exflag.flag = SCI_ERROR_CHILD;
         // call user's filter handler
         if (filter != NULL) {
             curFilterID = id;
             
             filtered = true;
-            filter->input(msg->getGroup(), msg->getContentBuf(), msg->getContentLen());
+            filter->input(msg->getGroup(), msg->getContentBuf(), msg->getContentLen(), &exflag);
         }
     }
 }

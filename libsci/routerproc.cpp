@@ -118,10 +118,11 @@ void RouterProcessor::process(Message * msg)
             } else {
                 filter = filterList->getFilter(msg->getFilterID());
                 if (filter != NULL) {
+                    sci_exflag_t exflag = {SCI_NORMAL, NULL};
                     // call user's filter handler
                     curFilterID = msg->getFilterID();
                     curGroup = msg->getGroup();
-                    filter->input(msg->getGroup(), msg->getContentBuf(), msg->getContentLen());
+                    filter->input(msg->getGroup(), msg->getContentBuf(), msg->getContentLen(), &exflag);
                 } else {
                     // bcast the message
                     routingList->bcast(msg->getGroup(), msg);

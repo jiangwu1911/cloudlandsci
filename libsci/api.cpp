@@ -287,6 +287,16 @@ int SCI_Query(sci_query_t query, void *ret_val)
                 return SCI_ERR_INVALID_CALLER;
             *p = gCtrlBlock->getRoutingList()->numOfSuccessor(SCI_GROUP_ALL);
             break;
+        case NUM_ERROR_SUCCESSORS:
+            if (gCtrlBlock->getMyRole() == CtrlBlock::BACK_END)
+                return SCI_ERR_INVALID_CALLER;
+            *p = gCtrlBlock->numOfErrSuccessors();
+            break;
+        case ERROR_SUCCESSORS:
+            if (gCtrlBlock->getMyRole() == CtrlBlock::BACK_END)
+                return SCI_ERR_INVALID_CALLER;
+            gCtrlBlock->retrieveErrSuccessors(p);
+            break;
         case SUCCESSOR_IDLIST:
             if (gCtrlBlock->getMyRole() == CtrlBlock::BACK_END)
                 return SCI_ERR_INVALID_CALLER;
@@ -826,7 +836,8 @@ int SCI_Filter_upload(int filter_id, sci_group_t group, int num_bufs, void *bufs
         Message *msg = new Message();
         msg->build(curFilterID, group, num_bufs, (char **)bufs, sizes, Message::DATA);
         if (filter) {
-            filter->input(group, msg->getContentBuf(), msg->getContentLen());
+            sci_exflag_t exflag = {SCI_NORMAL, NULL};
+            filter->input(group, msg->getContentBuf(), msg->getContentLen(), &exflag);
             delete msg;
         } else {    
             gCtrlBlock->getFilterProcessor()->deliever(msg);

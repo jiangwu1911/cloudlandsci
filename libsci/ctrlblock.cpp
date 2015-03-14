@@ -76,6 +76,7 @@ CtrlBlock::CtrlBlock()
     flowctlState = true;
     childHealthState = HEALTH;
     errChildren.clear();
+    errSuccessor.clear();
     cnt_disable = 0;
 
     endInfo = NULL;
@@ -398,6 +399,7 @@ void CtrlBlock::term()
     }
     embedAgents.clear();
     errChildren.clear();
+    errSuccessor.clear();
     unlock();
     if (handlerProc) {
         handlerProc->release();
@@ -578,6 +580,45 @@ void CtrlBlock::notifyChildHealthState(int hndl, int hState)
     unlock();
     setChildHealthState(hState);
     free(cList);
+}
+
+void CtrlBlock::addErrSuccessor(int hndl)
+{
+    lock();
+    errSuccessor.insert(hndl);
+    unlock();
+}
+
+void CtrlBlock::delErrSuccessor(int hndl)
+{
+    lock();
+    errSuccessor.erase(hndl);
+    unlock();
+}
+
+int CtrlBlock::numOfErrSuccessors()
+{
+    int num = 0;
+
+    lock();
+    num = errSuccessor.size();
+    unlock();
+
+    return num;
+}
+
+void CtrlBlock::retrieveErrSuccessors(int * ret_val)
+{
+    int i = 0;
+    ERRORCHILDREN_LIST::iterator it;
+
+    lock();
+    for (it = errSuccessor.begin(); it != errSuccessor.end(); it++) {
+        ret_val[i] = *it;
+        log_debug("getErrChildren: err Children: list[%d] = %d", i, ret_val[i]);
+        i++;
+    }
+    unlock();
 }
 
 void CtrlBlock::notifyChildHealthState(Message * msg)

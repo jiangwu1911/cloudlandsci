@@ -101,6 +101,7 @@ class CtrlBlock
         Observer             *observer;
         AGENT_MAP            embedAgents;
         ERRORCHILDREN_LIST   errChildren;
+        ERRORCHILDREN_LIST   errSuccessor;
         int                  cnt_disable;
 
         // flow control threshold
@@ -147,6 +148,10 @@ class CtrlBlock
 
         ROLE getMyRole();
         void setMyRole(CtrlBlock::ROLE ro); 
+        void addErrSuccessor(int hndl);
+        void delErrSuccessor(int hndl);
+        int numOfErrSuccessors();
+        void retrieveErrSuccessors(int * ret_val);
         int getMyHandle();
         void setMyHandle(int hndl);
         // embeded agent
