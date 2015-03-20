@@ -185,6 +185,9 @@ int Launcher::initEnv()
     if (envp) {
         env.set("SCI_SEGMENT_SIZE", envp);
     }
+    if (gCtrlBlock->getRecoverMode() == 1) {
+        env.set("SCI_ENABLE_RECOVER", "yes");
+    }
 
     // add any tool specific environment variables
     if (gCtrlBlock->getMyRole() == CtrlBlock::FRONT_END) {

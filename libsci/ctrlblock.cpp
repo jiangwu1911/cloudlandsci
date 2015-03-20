@@ -237,6 +237,7 @@ int CtrlBlock::init(sci_info_t * info)
 
     if (info->enable_recover == 1) { 
         recoverMode = 1; 
+        ::setenv("SCI_ENABLE_RECOVER", "yes", 1);
     }
 
     endInfo = (sci_info_t *) ::malloc(sizeof(sci_info_t));

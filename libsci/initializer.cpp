@@ -366,6 +366,10 @@ int Initializer::parseEnvStr(string &envStr)
     if ((envp != NULL) && (strcasecmp(envp, "yes") == 0) && (hndl < 0)) {
         gCtrlBlock->setMyRole(CtrlBlock::BACK_AGENT);
     }
+    envp = ::getenv("SCI_ENABLE_RECOVER");
+    if ((envp != NULL) && (strcasecmp(envp, "yes") == 0)) {
+        gCtrlBlock->setRecoverMode(1);
+    }
     envp = ::getenv("SCI_FLOWCTL_THRESHOLD");
     if (envp != NULL) {
         long long th = ::atoll(envp);
